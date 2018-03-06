@@ -28,13 +28,13 @@ Parameters:
   Portalid:
      AllowedPattern: ^[0-9]+$
      ConstraintDescription: portal id must be numeric.
-     Default: 00 
+     Default: '00' 
      Description: Id for portal configured in eGain application to access the CaseBase for IVR
      Type: String
   Casebaseid:
       AllowedPattern: ^[0-9]+$
       ConstraintDescription: casebase id must be numeric.
-      Default: 00 
+      Default: '00' 
       Description: Id for the CaseBase, which will provide script and aws queue for IVR.
       Type: String
 Rules:
@@ -57,13 +57,13 @@ Rules:
         Fn::Not:
         - Fn::Equals:
           - Ref: Portalid
-          - 00
+          - '00'
       AssertDescription: portal id is required
     - Assert:
         Fn::Not:
         - Fn::Equals:
           - Ref: Casebaseid
-          - 00
+          - '00'
       AssertDescription: casebase id is required
 Resources:
   IntegrationTestFunctionExecutionRole:
