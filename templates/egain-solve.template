@@ -11,7 +11,7 @@ Metadata:
       - Portalid
       - Casebaseid
     - Label:
-       default: AWS Quick Start Configuration
+        default: AWS Quick Start Configuration
       Parameters:
       - QSS3BucketName
       - QSS3KeyPrefix
@@ -34,17 +34,17 @@ Parameters:
     Description: The eGain Application URL is needed to access the Casebase.
     Type: String
   Portalid:
-     AllowedPattern: ^[0-9]+$
-     ConstraintDescription: This Portal Id must be numeric.
-     Default: '123456789000000'
-     Description: This Portal Id is needed to access the Casebase.
-     Type: String
+    AllowedPattern: ^[0-9]+$
+    ConstraintDescription: This Portal Id must be numeric.
+    Default: '123456789000000'
+    Description: This Portal Id is needed to access the Casebase.
+    Type: String
   Casebaseid:
-      AllowedPattern: ^[0-9]+$
-      ConstraintDescription: This Casebase Id must be numeric.
-      Default: '123456789000000'
-      Description: This Casebase Id is needed to access the Casebase.
-      Type: String
+    AllowedPattern: ^[0-9]+$
+    ConstraintDescription: This Casebase Id must be numeric.
+    Default: '123456789000000'
+    Description: This Casebase Id is needed to access the Casebase.
+    Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
@@ -154,24 +154,25 @@ Resources:
     Properties:
       Handler: egain_casebase_call.lambda_handler
       Runtime: python3.6
-      Description: Toolkit for Amazon Connect to access eGain Casebase for IVR and Routing
+      Description: Toolkit for Amazon Connect to access eGain Casebase for IVR and
+        Routing
       MemorySize: 128
       Timeout: 30
       Role:
         Fn::GetAtt: IntegrationFunctionExecutionRole.Arn
       Environment:
         Variables:
-           BASE_URL:
-              Ref: Baseurl
-           PORTAL_ID:
-              Ref: Portalid
-           CASEBASE_ID:
-              Ref: Casebaseid
+          BASE_URL:
+            Ref: Baseurl
+          PORTAL_ID:
+            Ref: Portalid
+          CASEBASE_ID:
+            Ref: Casebaseid
       Code:
         S3Bucket:
-           Ref: QSS3BucketName
+          Ref: QSS3BucketName
         S3Key:
-           Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration/lambda.zip
+          Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration/lambda.zip
   IntegrationFunctionPermission:
     Type: AWS::Lambda::Permission
     Properties:
