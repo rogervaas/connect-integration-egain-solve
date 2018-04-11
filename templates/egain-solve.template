@@ -10,35 +10,61 @@ Metadata:
       - Baseurl
       - Portalid
       - Casebaseid
+    - Label:
+       default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3KeyPrefix  
     ParameterLabels:
       Baseurl:
-        default: eGain Base Url
+        default: eGain URL
       Portalid:
         default: Portal Id
       Casebaseid:
-        default: CaseBase Id
+        default: Casebase Id
+      QSS3BucketName:
+        default: Quick Start S3 Bucket Name
+      QSS3KeyPrefix:
+        default: Quick Start S3 Key Prefix
+      
 Parameters:
   Baseurl:
     AllowedPattern: ^https:\/\/[a-zA-Z0-9-\/\.]+$
-    ConstraintDescription: Base Url must be a valid https URL.
+    ConstraintDescription: This URL must be a valid https URL.
     Default: https://example.egain.cloud/system
-    Description: eGain Application base url (load balancer url), which is needed to
-      access the CaseBase for IVR.
+    Description: The eGain Application URL is needed to access the Casebase.
     Type: String
   Portalid:
-    AllowedPattern: ^[0-9]+$
-    ConstraintDescription: portal id must be numeric.
-    Default: '00'
-    Description: Id for portal configured in eGain application to access the CaseBase
-      for IVR
-    Type: String
+     AllowedPattern: ^[0-9]+$
+     ConstraintDescription: This Portal Id must be numeric.
+     Default: '123456789000000' 
+     Description: This Portal Id is needed to access the Casebase.
+     Type: String
   Casebaseid:
-    AllowedPattern: ^[0-9]+$
-    ConstraintDescription: casebase id must be numeric.
-    Default: '00'
-    Description: Id for the CaseBase, which will provide script and aws queue for
-      IVR.
+      AllowedPattern: ^[0-9]+$
+      ConstraintDescription: This Casebase Id must be numeric.
+      Default: '123456789000000' 
+      Description: This Casebase Id is needed to access the Casebase.
+      Type: String
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-)
+    Description: S3 bucket name for the Quick Start assets. This string can include
+      numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
+      or end with a hyphen (-)
+    Default: quickstart-reference
     Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/)
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/)
+    Type: String
+    Default: connect/integration/egain-solve/latest/
 Rules:
   RegionSupport:
     Assertions:
@@ -54,19 +80,19 @@ Rules:
         - Fn::Equals:
           - Ref: Baseurl
           - https://example.egain.cloud/system
-      AssertDescription: Please provide the correct eGain Application base url.
+      AssertDescription: Please provide a valid eGain Application URL.
     - Assert:
         Fn::Not:
         - Fn::Equals:
           - Ref: Portalid
-          - '00'
-      AssertDescription: portal id is required
+          - '123456789000000'
+      AssertDescription: Portal Id is required.
     - Assert:
         Fn::Not:
         - Fn::Equals:
           - Ref: Casebaseid
-          - '00'
-      AssertDescription: casebase id is required
+          - '123456789000000'
+      AssertDescription: Casebase Id is required.
 Resources:
   IntegrationTestFunctionExecutionRole:
     Type: AWS::IAM::Role
@@ -93,8 +119,10 @@ Resources:
       Runtime: python3.6
       Timeout: 30
       Code:
-        S3Bucket: quickstart-reference
-        S3Key: connect/integration/egain/solve/latest/functions/packages/integration-test/lambda.zip
+        S3Bucket: 
+          Ref: QSS3BucketName
+        S3Key:
+          Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration-test/lambda.zip
   IntegrationTest:
     Type: Custom::IntegrationTest
     Version: '1.0'
@@ -127,22 +155,24 @@ Resources:
     Properties:
       Handler: egain_casebase_call.lambda_handler
       Runtime: python3.6
-      Description: Toolkit for Amazon Connect to access eGain Casebase for IVR
+      Description: Toolkit for Amazon Connect to access eGain Casebase for IVR and Routing
       MemorySize: 128
       Timeout: 30
       Role:
         Fn::GetAtt: IntegrationFunctionExecutionRole.Arn
       Environment:
         Variables:
-          BASE_URL:
-            Ref: Baseurl
-          PORTAL_ID:
-            Ref: Portalid
-          CASEBASE_ID:
-            Ref: Casebaseid
-        Code:
-          S3Bucket: quickstart-reference
-          S3Key: connect/integration/egain/solve/latest/functions/packages/integration/lambda.zip
+           BASE_URL:
+              Ref: Baseurl
+           PORTAL_ID:
+              Ref: Portalid
+           CASEBASE_ID:
+              Ref: Casebaseid
+      Code:
+        S3Bucket: 
+           Ref: QSS3BucketName
+        S3Key:
+           Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration/lambda.zip
   IntegrationFunctionPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -158,7 +188,7 @@ Outputs:
     Value:
       Fn::GetAtt: IntegrationFunctionExecutionRole.Arn
   IntegrationFunction:
-    Description: Lambda Function for Amazon Connect to access eGain Casebase for IVR
+    Description: Toolkit for Amazon Connect to access eGain Casebase for IVR and Routing
     Value:
       Fn::GetAtt: IntegrationFunction.Arn
 ...
