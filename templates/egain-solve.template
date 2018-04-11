@@ -5,7 +5,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Amazon Connect eGain Solve Integration Configuration
+        default: eGain Solve Configuration
       Parameters:
       - Baseurl
       - Portalid
@@ -14,7 +14,7 @@ Metadata:
        default: AWS Quick Start Configuration
       Parameters:
       - QSS3BucketName
-      - QSS3KeyPrefix  
+      - QSS3KeyPrefix
     ParameterLabels:
       Baseurl:
         default: eGain URL
@@ -26,7 +26,6 @@ Metadata:
         default: Quick Start S3 Bucket Name
       QSS3KeyPrefix:
         default: Quick Start S3 Key Prefix
-      
 Parameters:
   Baseurl:
     AllowedPattern: ^https:\/\/[a-zA-Z0-9-\/\.]+$
@@ -37,13 +36,13 @@ Parameters:
   Portalid:
      AllowedPattern: ^[0-9]+$
      ConstraintDescription: This Portal Id must be numeric.
-     Default: '123456789000000' 
+     Default: '123456789000000'
      Description: This Portal Id is needed to access the Casebase.
      Type: String
   Casebaseid:
       AllowedPattern: ^[0-9]+$
       ConstraintDescription: This Casebase Id must be numeric.
-      Default: '123456789000000' 
+      Default: '123456789000000'
       Description: This Casebase Id is needed to access the Casebase.
       Type: String
   QSS3BucketName:
@@ -54,7 +53,7 @@ Parameters:
     Description: S3 bucket name for the Quick Start assets. This string can include
       numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
       or end with a hyphen (-)
-    Default: quickstart-reference
+    Default: aws-quickstart
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
@@ -64,7 +63,7 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/)
     Type: String
-    Default: connect/integration/egain-solve/latest/
+    Default: connect-integration-egain-solve/
 Rules:
   RegionSupport:
     Assertions:
@@ -119,7 +118,7 @@ Resources:
       Runtime: python3.6
       Timeout: 30
       Code:
-        S3Bucket: 
+        S3Bucket:
           Ref: QSS3BucketName
         S3Key:
           Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration-test/lambda.zip
@@ -169,7 +168,7 @@ Resources:
            CASEBASE_ID:
               Ref: Casebaseid
       Code:
-        S3Bucket: 
+        S3Bucket:
            Ref: QSS3BucketName
         S3Key:
            Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration/lambda.zip
