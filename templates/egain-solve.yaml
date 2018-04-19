@@ -10,11 +10,6 @@ Metadata:
       - Baseurl
       - Portalid
       - Casebaseid
-    - Label:
-        default: AWS Quick Start Configuration
-      Parameters:
-      - QSS3BucketName
-      - QSS3KeyPrefix
     ParameterLabels:
       Baseurl:
         default: eGain URL
@@ -22,10 +17,6 @@ Metadata:
         default: Portal Id
       Casebaseid:
         default: Casebase Id
-      QSS3BucketName:
-        default: Quick Start S3 Bucket Name
-      QSS3KeyPrefix:
-        default: Quick Start S3 Key Prefix
 Parameters:
   Baseurl:
     AllowedPattern: ^https:\/\/[a-zA-Z0-9-\/\.]+$
@@ -45,25 +36,6 @@ Parameters:
     Default: '123456789000000'
     Description: This Casebase Id is needed to access the Casebase.
     Type: String
-  QSS3BucketName:
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
-      (-)
-    Description: S3 bucket name for the Quick Start assets. This string can include
-      numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
-      or end with a hyphen (-)
-    Default: aws-quickstart
-    Type: String
-  QSS3KeyPrefix:
-    AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slash (/)
-    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
-      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
-      forward slash (/)
-    Type: String
-    Default: connect-integration-egain-solve/
 Rules:
   RegionSupport:
     Assertions:
@@ -118,10 +90,8 @@ Resources:
       Runtime: python3.6
       Timeout: 30
       Code:
-        S3Bucket:
-          Ref: QSS3BucketName
-        S3Key:
-          Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration-test/lambda.zip
+        S3Bucket: aws-quickstart
+        S3Key: connect-integration-egain-solve/functions/packages/integration-test/lambda.zip
   IntegrationTest:
     Type: Custom::IntegrationTest
     Version: '1.0'
@@ -169,10 +139,8 @@ Resources:
           CASEBASE_ID:
             Ref: Casebaseid
       Code:
-        S3Bucket:
-          Ref: QSS3BucketName
-        S3Key:
-          Fn::Sub: ${QSS3KeyPrefix}functions/packages/integration/lambda.zip
+        S3Bucket: aws-quickstart
+        S3Key: connect-integration-egain-solve/functions/packages/integration/lambda.zip
   IntegrationFunctionPermission:
     Type: AWS::Lambda::Permission
     Properties:
