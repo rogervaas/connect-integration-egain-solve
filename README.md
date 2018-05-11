@@ -7,6 +7,6 @@ This Quick Start uses AWS Lambda functions to add eGain's omnichannel case manag
 
 ![Architecture for eGain Solve integration](https://d0.awsstatic.com/partner-network/QuickStart/connect/connect-integration-egain-architecture.png)
 
-For details and launch information, see the [data sheet](ttps://fwd.aws/gNjpM).
+For details and launch information, see the [data sheet](https://fwd.aws/gNjpM).
 
 To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
