@@ -1,3 +1,12 @@
 # connect-integration-egain-solve
+## Amazon Connect Integration -- eGain Solve
 
-This integration enables Amazon Connect with eGain Advisor. eGain Advisor for Amazon Connect is a next-generation desktop for contact center agents on the Amazon Connect contact center infrastructure. A cloud-based solution, designed for digital-first customer engagement, it features a unified, omnichannel agent desktop, with easy, push-button access to contextual knowledge and AI guidance. 
+eGain Solve is a customer engagement and knowledge management platform that helps resolve customer queries through social, mobile, web, and contact center channels.
+
+This Quick Start uses AWS Lambda functions to add eGain's omnichannel case management, AI-powered interactive voice response (IVR) and knowledge management, and analytics to Amazon Connect.
+
+![Architecture for eGain Solve integration](https://d0.awsstatic.com/partner-network/QuickStart/connect/connect-integration-egain-architecture.png)
+
+For details and launch information, see the [data sheet](ttps://fwd.aws/gNjpM).
+
+To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
